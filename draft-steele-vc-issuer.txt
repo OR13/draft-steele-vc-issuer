@@ -442,19 +442,19 @@ Table of Contents
               IDentifiers (UUIDs)", RFC 9562, DOI 10.17487/RFC9562, May
               2024, <https://www.rfc-editor.org/rfc/rfc9562>.
 
-7.2.  Informative References
-
-   [OpenID4VC]
-              OpenID Foundation, "OpenID for Verifiable Credential
-              Presentation", n.d., <https://openid.net/specs/openid-4-
-              verifiable-credential-issuance-1_0-ID1.html>.
-
    [Secure-VC]
               "Securing Verifiable Credentials using JOSE and COSE",
               n.d., <https://www.w3.org/TR/vc-jose-cose/>.
 
    [W3C-VC]   "Verifiable Credentials Data Model v2.0", n.d.,
               <https://www.w3.org/TR/vc-data-model-2.0/>.
+
+7.2.  Informative References
+
+   [OpenID4VC]
+              OpenID Foundation, "OpenID for Verifiable Credential
+              Presentation", n.d., <https://openid.net/specs/openid-4-
+              verifiable-credential-issuance-1_0-ID1.html>.
 
 Acknowledgments
 
