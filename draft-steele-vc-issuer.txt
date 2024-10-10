@@ -63,19 +63,20 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Issuer Resources
-     3.1.  Credentials
-       3.1.1.  Create
-       3.1.2.  Read
-   4.  Security Considerations
-     4.1.  Private Keys
-     4.2.  Authorization
-     4.3.  HTTPS
-   5.  IANA Considerations
-   6.  References
-     6.1.  Normative References
-     6.2.  Informative References
-   Appendix A.  Confirmation Binding
+   3.  Mandatory to Implement
+   4.  Issuer Resources
+     4.1.  Credentials
+       4.1.1.  Create
+     4.2.  Confirmation Methods
+       4.2.1.  Read
+   5.  Security Considerations
+     5.1.  Private Keys
+     5.2.  Authorization
+     5.3.  HTTPS
+   6.  IANA Considerations
+   7.  References
+     7.1.  Normative References
+     7.2.  Informative References
    Acknowledgments
    Author's Address
 
@@ -95,7 +96,7 @@ Table of Contents
    and excessive cryptographic agility.
 
    The API this document specifies is designed with priority for use by
-   organizations or businesses that need to request credentials for
+   organizations or businesses that need to request credentials from
    other organizations or governments.
 
    Although this API describes HTTP resources which require
@@ -117,58 +118,86 @@ Table of Contents
 
    The term cnf is defined in [RFC7800].
 
-   ES256 is a digital signature algorithm described in Section 3.4 of
-   [RFC7518].  EdDSA is a digital signature algorithm described in
-   Section 3.1 of [RFC8037].  In this document, EdDSA means EdDSA with
-   Ed25519, Ed448 is not supported.
+   The term ES256 is a digital signature algorithm described in
+   Section 3.4 of [RFC7518].
 
    This document uses "..." to ellide text in examples for readability.
 
-3.  Issuer Resources
+3.  Mandatory to Implement
 
-3.1.  Credentials
+   Although [Secure-VC] describes several different media types, and
+   each media type can be secured with many different signing or
+   encryption algorithms, this documents specifies the following as
+   mandatory to implement:
+
+   The following media types MUST be supported as JWT Claim Sets in the
+   request body of the issuance API:
+
+   *  application/vc
+
+   The following media types MUST be supported in the response body of
+   the issuance and read APIs:
+
+   *  application/vc+jwt
+
+   The following JSON Web Signature algorithms MUST be supported:
+
+   *  ES256
+
+   This document might be updated in the future to support additional
+   media types or signing algorithms.
+
+4.  Issuer Resources
+
+4.1.  Credentials
 
    The /credentials resource describes the collection of verifiable
-   credentials associated with an issuer.  This collection supports
-   creating, updating and retrieving resources.
+   credentials associated with an issuer.
 
-3.1.1.  Create
+   This collection supports creating, and retrieving resources.
 
-   Creating a verifiable credential required several individual steps to
-   be completed.  The server MUST validate the request body, ensuring
-   the JSON object is conformant to [W3C-VC].  The server MAY reject
-   credentials that do not match specific schemas.  The server SHOULD
-   confirm any relationships between the claims requested and the
-   identity of the subject initiating the request.  For example, if Bob
-   is requesting a name credential, the server should ensure that Bob is
-   not able to receive a credential with the name Alice.  A detailed
-   analysis and set of recommendations regarding binding claims about
-   subjects to credentials is beyond the scope of this document.  The
-   server MUST retrieve or compute additional claims related to the
-   validity period of the credential and its status update mechanisms.
-   For example, a Driver's License credential has a fixed validity
-   period with a start and end date, and can be suspended or revoked.
-   Other credentials might never expire, or might not support any status
-   update claims.
+4.1.1.  Create
 
-   An important step in the issuance of a credential is for the issuer
-   to confirm the subject of the credential controls a public key or any
-   identifer the credential will be bound to.  This document does not
-   specify how the issuer determines this, however an example is
-   provided in the appendix.
+   Creating a verifiable credential requires several individual steps to
+   be completed.
 
-   The server MUST validate the credential after applying all server
-   side changes, to ensure it remains conformant to [W3C-VC].  The
-   server MUST support application/vc and application/vc+jwt media
-   types.  The server MUST sign the response token with ES256 or EdDSA
-   with Ed25519.  The server MAY overwrite any member of the request
-   body.  The server MAY inject additional JWT claims, such as iat, exp,
-   iss, sub, and cnf, before securing the credential as a JWT.  The
-   server SHOULD assign an id value that is globally unique, such as a
-   UUID as described in Section 5.4 of [RFC9562].
+   *  The server MUST validate the request body, ensuring the JSON
+      object is conformant to [W3C-VC].
 
-   The server MAY create credentials related to the issuance request,
-   such as credentials which support status assertions or status lists.
+   *  The server MAY reject credentials that do not match specific
+      schemas.
+
+   *  The server SHOULD confirm any relationships between the claims
+      requested and the identity of the subject initiating the request.
+      For example, if Bob is requesting a name credential, the server
+      should ensure that Bob is not able to receive a credential with
+      the name Alice.  A detailed analysis and set of recommendations
+      regarding binding claims about subjects to credentials is beyond
+      the scope of this document.
+
+   *  The server MAY retrieve or compute additional claims related to
+      the validity period of the credential and its status update
+      mechanisms.  For example, a Driver's License credential has a
+      fixed validity period with a start and end date, and can be
+      suspended or revoked.  Other credentials might never expire, or
+      might not support any status update claims.
+
+   *  The server MUST validate the credential after applying all server
+      side changes, to ensure it remains conformant to [W3C-VC].
+
+   *  The server MUST sign the response token with ES256.
+
+   *  The server MAY overwrite any member of the request body.
+
+   *  The server MAY inject additional JWT claims, such as iat, exp,
+      iss, sub, and cnf, before securing the credential as a JWT.
+
+   *  The server SHOULD assign an id value that is globally unique, such
+      as a UUID as described in Section 5.4 of [RFC9562].
+
+   *  The server MAY create credentials related to the issuance request,
+      such as credentials which support status assertions or status
+      lists.
 
    The following informative example demonstrates how HTTP resources and
    media types are related to the credential issuance process.
@@ -197,6 +226,7 @@ Table of Contents
        "id": "https://example.gov/issuer/42",
      },
      ...
+   }
 
    Response:
 
@@ -207,120 +237,24 @@ Table of Contents
 
                        Figure 1: Issuing a Credential
 
-3.1.2.  Read
+4.2.  Confirmation Methods
 
-   Retrieving a verifiable credential requires several steps to be
-   completed.  The server must determine if the credential with the
-   given id exists.  Some credentials could require authorization, and
-   others might support anonymous access.  If the credential does not
-   support anonymous access, the server MUST ensure the client making
-   the request is authorized to read the credential.
+   An important step in the issuance of a credential is for the issuer
+   to confirm the subject of the credential controls a public key or
+   cryptographic identifier the credential will be bound to.
 
-   The following informative example demonstrates how HTTP resources and
-   media types are related to resolving or retrieving credentials.
+   Confirmation methods are described in detail in [RFC7800].
 
-   Request:
+   This section describes a simple HTTP API for convincing an issuer to
+   accept a confirmation claim in a requested credential issuance.
 
-   GET /credentials/:id HTTP/1.1
-   Host: example.gov
-   Authorization: Bearer ey...
-   Accept: application/vc+jwt
+   The holder first obtains a nonce from the issuer, and then presents a
+   confirmation token, that proves possession of a given key or
+   cryptographic identifier, to a given audience, as part of a
+   credential issuance request.
 
-   Response:
-
-   HTTP/1.1 200 OK
-   Content-Type: application/vc+jwt
-
-   eyJhbGciOiJFZE...
-
-                       Figure 2: Reading a Credential
-
-4.  Security Considerations
-
-   TODO Security
-
-4.1.  Private Keys
-
-   It is important to protect the signing key used to issue credentials.
-   It is RECOMMENDED that the private key be initialized such that it
-   cannot be exported.
-
-4.2.  Authorization
-
-   HTTP Clients that request credential issuance MUST be authenticated.
-   A client may request credentials related to or bound to many
-   different subjects.  A full description of policy for issuing
-   credentials for subjects is beyond the scope of this document.
-
-4.3.  HTTPS
-
-   HTTPS MUST be used with all resources described in this document.
-   Issuers MUST support at least TLS 1.3 or a more recent version.
-
-5.  IANA Considerations
-
-   This document has no IANA actions.
-
-6.  References
-
-6.1.  Normative References
-
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/rfc/rfc2119>.
-
-   [RFC7518]  Jones, M., "JSON Web Algorithms (JWA)", RFC 7518,
-              DOI 10.17487/RFC7518, May 2015,
-              <https://www.rfc-editor.org/rfc/rfc7518>.
-
-   [RFC7519]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web Token
-              (JWT)", RFC 7519, DOI 10.17487/RFC7519, May 2015,
-              <https://www.rfc-editor.org/rfc/rfc7519>.
-
-   [RFC7800]  Jones, M., Bradley, J., and H. Tschofenig, "Proof-of-
-              Possession Key Semantics for JSON Web Tokens (JWTs)",
-              RFC 7800, DOI 10.17487/RFC7800, April 2016,
-              <https://www.rfc-editor.org/rfc/rfc7800>.
-
-   [RFC8037]  Liusvaara, I., "CFRG Elliptic Curve Diffie-Hellman (ECDH)
-              and Signatures in JSON Object Signing and Encryption
-              (JOSE)", RFC 8037, DOI 10.17487/RFC8037, January 2017,
-              <https://www.rfc-editor.org/rfc/rfc8037>.
-
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
-              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
-
-   [RFC9449]  Fett, D., Campbell, B., Bradley, J., Lodderstedt, T.,
-              Jones, M., and D. Waite, "OAuth 2.0 Demonstrating Proof of
-              Possession (DPoP)", RFC 9449, DOI 10.17487/RFC9449,
-              September 2023, <https://www.rfc-editor.org/rfc/rfc9449>.
-
-   [RFC9562]  Davis, K., Peabody, B., and P. Leach, "Universally Unique
-              IDentifiers (UUIDs)", RFC 9562, DOI 10.17487/RFC9562, May
-              2024, <https://www.rfc-editor.org/rfc/rfc9562>.
-
-6.2.  Informative References
-
-   [OpenID4VC]
-              OpenID Foundation, "OpenID for Verifiable Credential
-              Presentation", n.d., <https://openid.net/specs/openid-4-
-              verifiable-credential-issuance-1_0-ID1.html>.
-
-   [Secure-VC]
-              "Securing Verifiable Credentials using JOSE and COSE",
-              n.d., <https://www.w3.org/TR/vc-jose-cose/>.
-
-   [W3C-VC]   "Verifiable Credentials Data Model v2.0", n.d.,
-              <https://www.w3.org/TR/vc-data-model-2.0/>.
-
-Appendix A.  Confirmation Binding
-
-   In this example, the holder first obtains a nonce from the issuer,
-   and then presents a confirmation token, that proves possession of a
-   given key, to a given audience, as part of a credential issuance
-   request.
+   The following informative example demonstrates one way this can be
+   accomplished:
 
    Request:
 
@@ -341,7 +275,7 @@ Appendix A.  Confirmation Binding
      "c_nonce_expires_in": 120
    }
 
-                        Figure 3: Requesting a Nonce
+                        Figure 2: Requesting a Nonce
 
    To create the confirmation token, the holder signs a key or key
    reference in the protected header, and the nonce and an audience in
@@ -362,9 +296,14 @@ Appendix A.  Confirmation Binding
      "nonce": "LarRGSbmUPYtRYO6BQ4yn8"
    }
 
-                        Figure 4: Confirmation Token
+                        Figure 3: Confirmation Token
 
-   Note that the typ value can be different or absent.
+   Note that the typ value in the protected header can be different or
+   absent.
+
+   The aud, iat and nonce claims MUST be present in the payload.
+   Additional claims MAY be present, and MUST be ignored when not
+   understood.
 
    The confirmation token is then passed as a query parameter in the
    credential issuance request us the cnft query parameter.
@@ -394,10 +333,10 @@ Appendix A.  Confirmation Binding
 
    eyJhbGciOiJFZE...
 
-           Figure 5: Issuing Credential with Subject Confirmation
+           Figure 4: Issuing Credential with Subject Confirmation
 
-   A server process the cnft query parameter by verifying the signature
-   on the confirmation token in the protected header, and then
+   A server processes the cnft query parameter by verifying the
+   signature on the confirmation token in the protected header, and then
    validating the nonce.  Validating the nonce can be handled different
    ways, including lookups in a stateful database or checking digital
    signatures.  A detailed description of nonce production and
@@ -411,6 +350,110 @@ Appendix A.  Confirmation Binding
    The server MUST return a 400 error in the case that a cnft query
    parameter is sent, but no corresponding confirmation claim exists in
    the request body.
+
+4.2.1.  Read
+
+   Retrieving a verifiable credential requires several steps to be
+   completed.  The server must determine if the credential with the
+   given id is available.  Some credentials types SHOULD require
+   authorization, and other credential types SHOULD support anonymous
+   access.  If the credential does not support anonymous access, the
+   server MUST ensure the client making the request is authorized to
+   read the credential.  A detailed analys of credential types and their
+   associated requirements is beyond the scope of this document.
+
+   The following informative example demonstrates how HTTP resources and
+   media types are related to resolving or retrieving credentials.
+
+   Request:
+
+   GET /credentials/:id HTTP/1.1
+   Host: example.gov
+   Authorization: Bearer ey...
+   Accept: application/vc+jwt
+
+   Response:
+
+   HTTP/1.1 200 OK
+   Content-Type: application/vc+jwt
+
+   eyJhbGciOiJFZE...
+
+                       Figure 5: Reading a Credential
+
+5.  Security Considerations
+
+5.1.  Private Keys
+
+   It is important to protect the signing key used to issue credentials,
+   and well as any confirmation keys associated with the credentials.
+   It is RECOMMENDED that all private keys be initialized such that they
+   cannot be exported.
+
+5.2.  Authorization
+
+   HTTP Clients that request credential issuance MUST be authenticated.
+   A client may request credentials related to or bound to many
+   different subjects.  A full description of policy for issuing
+   credentials for subjects is beyond the scope of this document.
+
+5.3.  HTTPS
+
+   HTTPS MUST be used with all resources described in this document.
+   Issuers MUST support at least TLS 1.3 or a more recent version.
+
+6.  IANA Considerations
+
+   This document has no IANA actions.
+
+7.  References
+
+7.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC7518]  Jones, M., "JSON Web Algorithms (JWA)", RFC 7518,
+              DOI 10.17487/RFC7518, May 2015,
+              <https://www.rfc-editor.org/rfc/rfc7518>.
+
+   [RFC7519]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web Token
+              (JWT)", RFC 7519, DOI 10.17487/RFC7519, May 2015,
+              <https://www.rfc-editor.org/rfc/rfc7519>.
+
+   [RFC7800]  Jones, M., Bradley, J., and H. Tschofenig, "Proof-of-
+              Possession Key Semantics for JSON Web Tokens (JWTs)",
+              RFC 7800, DOI 10.17487/RFC7800, April 2016,
+              <https://www.rfc-editor.org/rfc/rfc7800>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC9449]  Fett, D., Campbell, B., Bradley, J., Lodderstedt, T.,
+              Jones, M., and D. Waite, "OAuth 2.0 Demonstrating Proof of
+              Possession (DPoP)", RFC 9449, DOI 10.17487/RFC9449,
+              September 2023, <https://www.rfc-editor.org/rfc/rfc9449>.
+
+   [RFC9562]  Davis, K., Peabody, B., and P. Leach, "Universally Unique
+              IDentifiers (UUIDs)", RFC 9562, DOI 10.17487/RFC9562, May
+              2024, <https://www.rfc-editor.org/rfc/rfc9562>.
+
+7.2.  Informative References
+
+   [OpenID4VC]
+              OpenID Foundation, "OpenID for Verifiable Credential
+              Presentation", n.d., <https://openid.net/specs/openid-4-
+              verifiable-credential-issuance-1_0-ID1.html>.
+
+   [Secure-VC]
+              "Securing Verifiable Credentials using JOSE and COSE",
+              n.d., <https://www.w3.org/TR/vc-jose-cose/>.
+
+   [W3C-VC]   "Verifiable Credentials Data Model v2.0", n.d.,
+              <https://www.w3.org/TR/vc-data-model-2.0/>.
 
 Acknowledgments
 
