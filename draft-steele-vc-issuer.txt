@@ -302,6 +302,7 @@ Table of Contents
    absent.
 
    The aud, iat and nonce claims MUST be present in the payload.
+
    Additional claims MAY be present, and MUST be ignored when not
    understood.
 
@@ -354,7 +355,7 @@ Table of Contents
 4.2.1.  Read
 
    Retrieving a verifiable credential requires several steps to be
-   completed.  The server must determine if the credential with the
+   completed.  The server MUST determine if the credential with the
    given id is available.  Some credentials types SHOULD require
    authorization, and other credential types SHOULD support anonymous
    access.  If the credential does not support anonymous access, the

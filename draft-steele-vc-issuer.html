@@ -1413,12 +1413,12 @@ Cache-Control: no-store
           </figcaption></figure>
 </div>
 <p id="section-4.2-9">Note that the <code>typ</code> value in the protected header can be different or absent.<a href="#section-4.2-9" class="pilcrow">¶</a></p>
-<p id="section-4.2-10">The <code>aud</code>, <code>iat</code> and <code>nonce</code> claims <span class="bcp14">MUST</span> be present in the payload.
-Additional claims <span class="bcp14">MAY</span> be present, and <span class="bcp14">MUST</span> be ignored when not understood.<a href="#section-4.2-10" class="pilcrow">¶</a></p>
-<p id="section-4.2-11">The confirmation token is then passed as a query parameter in the credential issuance request us the <code>cnft</code> query parameter.<a href="#section-4.2-11" class="pilcrow">¶</a></p>
+<p id="section-4.2-10">The <code>aud</code>, <code>iat</code> and <code>nonce</code> claims <span class="bcp14">MUST</span> be present in the payload.<a href="#section-4.2-10" class="pilcrow">¶</a></p>
+<p id="section-4.2-11">Additional claims <span class="bcp14">MAY</span> be present, and <span class="bcp14">MUST</span> be ignored when not understood.<a href="#section-4.2-11" class="pilcrow">¶</a></p>
+<p id="section-4.2-12">The confirmation token is then passed as a query parameter in the credential issuance request us the <code>cnft</code> query parameter.<a href="#section-4.2-12" class="pilcrow">¶</a></p>
 <span id="name-issuing-credential-with-sub"></span><div id="example-issuance-with-confirnmation-request">
 <figure id="figure-4">
-          <div class="alignLeft art-text artwork" id="section-4.2-12.1">
+          <div class="alignLeft art-text artwork" id="section-4.2-13.1">
 <pre>
 Request:
 
@@ -1451,18 +1451,18 @@ eyJhbGciOiJFZE...
 <a href="#name-issuing-credential-with-sub" class="selfRef">Issuing Credential with Subject Confirmation</a>
           </figcaption></figure>
 </div>
-<p id="section-4.2-13">A server processes the <code>cnft</code> query parameter by verifying the signature on the confirmation token in the protected header, and then validating the <code>nonce</code>.
+<p id="section-4.2-14">A server processes the <code>cnft</code> query parameter by verifying the signature on the confirmation token in the protected header, and then validating the <code>nonce</code>.
 Validating the <code>nonce</code> can be handled different ways, including lookups in a stateful database or checking digital signatures.
 A detailed description of nonce production and consumption is beyond the scope of this document, see <span>[<a href="#OpenID4VC" class="cite xref">OpenID4VC</a>]</span> for a description of one way that nonces can be used during credential issuance.
-Once the issuer is satisfied that the nonce is sufficiently fresh, the issuer checks that either the public key used to sign the confirmation token, or its thumbprint, is included in the credential.<a href="#section-4.2-13" class="pilcrow">¶</a></p>
-<p id="section-4.2-14">The server <span class="bcp14">MUST</span> return a 400 error in the case that a <code>cnft</code> query parameter is sent, but no corresponding confirmation claim exists in the request body.<a href="#section-4.2-14" class="pilcrow">¶</a></p>
+Once the issuer is satisfied that the nonce is sufficiently fresh, the issuer checks that either the public key used to sign the confirmation token, or its thumbprint, is included in the credential.<a href="#section-4.2-14" class="pilcrow">¶</a></p>
+<p id="section-4.2-15">The server <span class="bcp14">MUST</span> return a 400 error in the case that a <code>cnft</code> query parameter is sent, but no corresponding confirmation claim exists in the request body.<a href="#section-4.2-15" class="pilcrow">¶</a></p>
 <div id="read">
 <section id="section-4.2.1">
           <h4 id="name-read">
 <a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-read" class="section-name selfRef">Read</a>
           </h4>
 <p id="section-4.2.1-1">Retrieving a verifiable credential requires several steps to be completed.
-The server must determine if the credential with the given <code>id</code> is available.
+The server <span class="bcp14">MUST</span> determine if the credential with the given <code>id</code> is available.
 Some credentials types <span class="bcp14">SHOULD</span> require authorization, and other credential types <span class="bcp14">SHOULD</span> support anonymous access.
 If the credential does not support anonymous access, the server <span class="bcp14">MUST</span> ensure the client making the request is authorized to read the credential.
 A detailed analys of credential types and their associated requirements is beyond the scope of this document.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
