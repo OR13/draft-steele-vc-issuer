@@ -39,7 +39,7 @@ informative:
   OpenID4VC:
     author:
       org: "OpenID Foundation"
-    title: "OpenID for Verifiable Credential Presentation"
+    title: "OpenID for Verifiable Credential Issuance"
     target: "https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-ID1.html"
 ---
 
