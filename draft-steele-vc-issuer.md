@@ -223,6 +223,7 @@ To create the confirmation token, the holder signs a key or key reference in the
 Note that the `typ` value in the protected header can be different or absent.
 
 The `aud`, `iat` and `nonce` claims MUST be present in the payload.
+
 Additional claims MAY be present, and MUST be ignored when not understood.
 
 The confirmation token is then passed as a query parameter in the credential issuance request us the `cnft` query parameter.
@@ -266,7 +267,7 @@ The server MUST return a 400 error in the case that a `cnft` query parameter is 
 ### Read
 
 Retrieving a verifiable credential requires several steps to be completed.
-The server must determine if the credential with the given `id` is available.
+The server MUST determine if the credential with the given `id` is available.
 Some credentials types SHOULD require authorization, and other credential types SHOULD support anonymous access.
 If the credential does not support anonymous access, the server MUST ensure the client making the request is authorized to read the credential.
 A detailed analys of credential types and their associated requirements is beyond the scope of this document.
