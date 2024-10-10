@@ -28,14 +28,14 @@ normative:
   RFC7519:
   RFC7800:
   RFC9449:
-
-informative:
   W3C-VC:
     title: "Verifiable Credentials Data Model v2.0"
     target: https://www.w3.org/TR/vc-data-model-2.0/
   Secure-VC:
     title: "Securing Verifiable Credentials using JOSE and COSE"
     target: https://www.w3.org/TR/vc-jose-cose/
+
+informative:
   OpenID4VC:
     author:
       org: "OpenID Foundation"
