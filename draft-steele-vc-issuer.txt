@@ -453,7 +453,7 @@ Table of Contents
 
    [OpenID4VC]
               OpenID Foundation, "OpenID for Verifiable Credential
-              Presentation", n.d., <https://openid.net/specs/openid-4-
+              Issuance", n.d., <https://openid.net/specs/openid-4-
               verifiable-credential-issuance-1_0-ID1.html>.
 
 Acknowledgments
