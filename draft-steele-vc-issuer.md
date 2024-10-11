@@ -84,11 +84,11 @@ Although {{Secure-VC}} describes several different media types, and each media t
 
 The following media types MUST be supported as JWT Claim Sets in the request body of the issuance API:
 
-- application/vc
+- `application/vc`
 
 The following media types MUST be supported in the response body of the issuance and read APIs:
 
-- application/vc+jwt
+- `application/vc+jwt`
 
 The following JSON Web Signature algorithms MUST be supported:
 
@@ -297,7 +297,7 @@ eyJhbGciOiJFZE...
 
 ## Private Keys
 
-It is important to protect the signing key used to issue credentials, and well as any confirmation keys associated with the credentials.
+It is important to protect the signing key used to issue credentials, as well as any confirmation keys associated with the credentials.
 It is RECOMMENDED that all private keys be initialized such that they cannot be exported.
 
 ## Authorization
