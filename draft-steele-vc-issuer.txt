@@ -4,8 +4,8 @@
 
 Network Working Group                                          O. Steele
 Internet-Draft                                                 Transmute
-Intended status: Informational                           10 October 2024
-Expires: 13 April 2025
+Intended status: Informational                           11 October 2024
+Expires: 14 April 2025
 
 
                                VC Issuer
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 April 2025.
+   This Internet-Draft will expire on 14 April 2025.
 
 Copyright Notice
 
@@ -387,8 +387,8 @@ Table of Contents
 5.1.  Private Keys
 
    It is important to protect the signing key used to issue credentials,
-   and well as any confirmation keys associated with the credentials.
-   It is RECOMMENDED that all private keys be initialized such that they
+   as well as any confirmation keys associated with the credentials.  It
+   is RECOMMENDED that all private keys be initialized such that they
    cannot be exported.
 
 5.2.  Authorization
