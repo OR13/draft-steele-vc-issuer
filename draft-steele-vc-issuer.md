@@ -34,6 +34,14 @@ normative:
   Secure-VC:
     title: "Securing Verifiable Credentials using JOSE and COSE"
     target: https://www.w3.org/TR/vc-jose-cose/
+  W3C-DID:
+    title: "Decentralized Identifiers (DIDs) v1.0"
+    target: "https://www.w3.org/TR/did-core/"
+  Json-Schema:
+    title: "JSON Schema"
+    target: "https://json-schema.org/draft/2020-12"
+
+
 
 informative:
   OpenID4VC:
@@ -41,6 +49,7 @@ informative:
       org: "OpenID Foundation"
     title: "OpenID for Verifiable Credential Issuance"
     target: "https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-ID1.html"
+
 ---
 
 --- abstract
@@ -292,6 +301,73 @@ eyJhbGciOiJFZE...
 
 ~~~
 {: #example-read-request align="left" title="Reading a Credential"}
+
+
+## Issuer Identifiers
+
+There are many different ways to discover the cryptographic keys used to verify credentials signed by an issuer.
+
+Issuer's that are required to issue credentials with web based decentralized identifiers, as described in {{W3C-DID}} MUST host special JSON documents called DID Documents under specific paths.
+
+For example, to create a web based decentralized identifier for `https://vendor.example` a JSON document needs to exist at `https://vendor.example/.well-known/did.json`
+
+To create a decentralized identifier for `https://vendor.example/suppliers/123` a JSON document needs to exiist at `https://vendor.example/suppliers/123/did.json`
+
+The resource at this location SHOULD be served with media type `application/json`, but MAY be served with the more specific media type `application/did+json`.
+
+If a credential has a header such as:
+
+~~~
+{
+  "typ": "vc+jwt",
+  "alg": "ES256",
+  "kid": "did:web:vendor.example#0ZcOCORZNYy-DWpqq30jZyJGHTN0d2HglBV3uiguA4I"
+}
+~~~
+
+Then the resource at `https://vendor.example/.well-known/did.json` should look like:
+
+~~~
+{
+  "id": "did:web:vendor.example",
+  "verificationMethod": [{
+    "id": "did:web:vendor.example#0ZcOCORZNYy-DWpqq30jZyJGHTN0d2HglBV3uiguA4I",
+    "type": "JsonWebKey",
+    "publicKeyJwk": {
+      "kty": "EC",
+      "crv": "P-256",
+      "x": "nUWAoAv3XZith8E7i19OdaxOLYFOwM-Z2EuM02TirT4",
+      "y": "HskHU8BjUi1U9Xqi7Swmj8gwAK_0xkcDjEW_71SosEY"
+    }
+  }]
+}
+~~~
+
+Additional properties MAY be present, when not understood they MUST be ignored.
+
+## Credential Schemas
+
+There are many different ways to describe the requirements associated a credential type, but one way is to use JSON Schema ({{Json-Schema}}).
+
+Issuer's host the JSON Schema files at a specific url, for example: `https://vendor.example/credentials/schema/trade-license.schema.json`
+
+The resource at the URL resolves to a JSON document, for example:
+
+~~~
+{
+  "$id": "https://vendor.example/credentials/schema/trade-license.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Trade License",
+  "type": "object",
+  "properties": {
+    ...
+~~~
+
+The resource at this location SHOULD be served with media type `application/json`, but MAY be served with the more specific media type `application/schema+json`.
+
+Schemas MUST be cached locally prior to their use, and MUST NOT be resolved over the network just in time, after verification.
+
+Schema checks MUST be performed after credential verification, but before any business processing or policy decisions are made based on the credential claims.
 
 # Security Considerations
 
