@@ -1030,7 +1030,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Steele</td>
-<td class="center">Expires 14 April 2025</td>
+<td class="center">Expires 18 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1043,12 +1043,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-steele-vc-issuer-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-10-11" class="published">11 October 2024</time>
+<time datetime="2024-10-15" class="published">15 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-04-14">14 April 2025</time></dd>
+<dd class="expires"><time datetime="2025-04-18">18 April 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1093,7 +1093,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1149,6 +1149,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-read" class="internal xref">Read</a></p>
 </li>
                 </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-issuer-identifiers" class="internal xref">Issuer Identifiers</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-credential-schemas" class="internal xref">Credential Schemas</a></p>
 </li>
             </ul>
 </li>
@@ -1495,6 +1501,71 @@ eyJhbGciOiJFZE...
 </div>
 </section>
 </div>
+<div id="issuer-identifiers">
+<section id="section-4.3">
+        <h3 id="name-issuer-identifiers">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-issuer-identifiers" class="section-name selfRef">Issuer Identifiers</a>
+        </h3>
+<p id="section-4.3-1">There are many different ways to discover the cryptographic keys used to verify credentials signed by an issuer.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">Issuer's that are required to issue credentials with web based decentralized identifiers, as described in <span>[<a href="#W3C-DID" class="cite xref">W3C-DID</a>]</span> <span class="bcp14">MUST</span> host special JSON documents called DID Documents under specific paths.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">For example, to create a web based decentralized identifier for <code>https://vendor.example</code> a JSON document needs to exist at <code>https://vendor.example/.well-known/did.json</code><a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-4">To create a decentralized identifier for <code>https://vendor.example/suppliers/123</code> a JSON document needs to exiist at <code>https://vendor.example/suppliers/123/did.json</code><a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.3-5">The resource at this location <span class="bcp14">SHOULD</span> be served with media type <code>application/json</code>, but <span class="bcp14">MAY</span> be served with the more specific media type <code>application/did+json</code>.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-6">If a credential has a header such as:<a href="#section-4.3-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.3-7">
+<pre>
+{
+  "typ": "vc+jwt",
+  "alg": "ES256",
+  "kid": "did:web:vendor.example#0ZcOCORZNYy-DWpqq30jZyJGHTN0d2HglBV3uiguA4I"
+}
+</pre><a href="#section-4.3-7" class="pilcrow">¶</a>
+</div>
+<p id="section-4.3-8">Then the resource at <code>https://vendor.example/.well-known/did.json</code> should look like:<a href="#section-4.3-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.3-9">
+<pre>
+{
+  "id": "did:web:vendor.example",
+  "verificationMethod": [{
+    "id": "did:web:vendor.example#0ZcOCORZNYy-DWpqq30jZyJGHTN0d2HglBV3uiguA4I",
+    "type": "JsonWebKey",
+    "publicKeyJwk": {
+      "kty": "EC",
+      "crv": "P-256",
+      "x": "nUWAoAv3XZith8E7i19OdaxOLYFOwM-Z2EuM02TirT4",
+      "y": "HskHU8BjUi1U9Xqi7Swmj8gwAK_0xkcDjEW_71SosEY"
+    }
+  }]
+}
+</pre><a href="#section-4.3-9" class="pilcrow">¶</a>
+</div>
+<p id="section-4.3-10">Additional properties <span class="bcp14">MAY</span> be present, when not understood they <span class="bcp14">MUST</span> be ignored.<a href="#section-4.3-10" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="credential-schemas">
+<section id="section-4.4">
+        <h3 id="name-credential-schemas">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-credential-schemas" class="section-name selfRef">Credential Schemas</a>
+        </h3>
+<p id="section-4.4-1">There are many different ways to describe the requirements associated a credential type, but one way is to use JSON Schema (<span>[<a href="#Json-Schema" class="cite xref">Json-Schema</a>]</span>).<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">Issuer's host the JSON Schema files at a specific url, for example: <code>https://vendor.example/credentials/schema/trade-license.schema.json</code><a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<p id="section-4.4-3">The resource at the URL resolves to a JSON document, for example:<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.4-4">
+<pre>
+{
+  "$id": "https://vendor.example/credentials/schema/trade-license.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Trade License",
+  "type": "object",
+  "properties": {
+    ...
+</pre><a href="#section-4.4-4" class="pilcrow">¶</a>
+</div>
+<p id="section-4.4-5">The resource at this location <span class="bcp14">SHOULD</span> be served with media type <code>application/json</code>, but <span class="bcp14">MAY</span> be served with the more specific media type <code>application/schema+json</code>.<a href="#section-4.4-5" class="pilcrow">¶</a></p>
+<p id="section-4.4-6">Schemas <span class="bcp14">MUST</span> be cached locally prior to their use, and <span class="bcp14">MUST NOT</span> be resolved over the network just in time, after verification.<a href="#section-4.4-6" class="pilcrow">¶</a></p>
+<p id="section-4.4-7">Schema checks <span class="bcp14">MUST</span> be performed after credential verification, but before any business processing or policy decisions are made based on the credential claims.<a href="#section-4.4-7" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="security-considerations">
@@ -1551,6 +1622,10 @@ Issuers <span class="bcp14">MUST</span> support at least TLS 1.3 or a more recen
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="Json-Schema">[Json-Schema]</dt>
+        <dd>
+<span class="refTitle">"JSON Schema"</span>, <span>n.d.</span>, <span>&lt;<a href="https://json-schema.org/draft/2020-12">https://json-schema.org/draft/2020-12</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
@@ -1582,6 +1657,10 @@ Issuers <span class="bcp14">MUST</span> support at least TLS 1.3 or a more recen
 <dt id="Secure-VC">[Secure-VC]</dt>
         <dd>
 <span class="refTitle">"Securing Verifiable Credentials using JOSE and COSE"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.w3.org/TR/vc-jose-cose/">https://www.w3.org/TR/vc-jose-cose/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="W3C-DID">[W3C-DID]</dt>
+        <dd>
+<span class="refTitle">"Decentralized Identifiers (DIDs) v1.0"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.w3.org/TR/did-core/">https://www.w3.org/TR/did-core/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="W3C-VC">[W3C-VC]</dt>
       <dd>
