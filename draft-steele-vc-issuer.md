@@ -335,6 +335,7 @@ Then the resource at `https://vendor.example/.well-known/did.json` should look l
     "type": "JsonWebKey",
     "publicKeyJwk": {
       "kty": "EC",
+      "alg": "ES256",
       "crv": "P-256",
       "x": "nUWAoAv3XZith8E7i19OdaxOLYFOwM-Z2EuM02TirT4",
       "y": "HskHU8BjUi1U9Xqi7Swmj8gwAK_0xkcDjEW_71SosEY"
